@@ -8,9 +8,23 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="js/bootstrap.min.css">
 
-    <title>INFOPETS(DEV)</title>
+    <title>Laradock Básico - Tutorial Docker Laradock Git no Ubuntu</title>
   </head>
   <body>
+	<nav class="navbar navbar-expand-lg navbar-light bg-light" id="div_nav_top">
+  		<a class="navbar-brand" href="index.html">Home</a>
+  		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    		<span class="navbar-toggler-icon"></span>
+  		</button>
+
+  		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+    		<ul class="navbar-nav mr-auto" id="ul_nav_top">
+      			<li class="nav-item active">
+        			<a class="nav-link" href="https://github.com/leandro-mandu">Idealizador</a>
+      			</li>
+    		</ul>
+  		</div>
+	</nav>
 	<div class="container">
 		<div class="row">
 			<div class="col-2">
@@ -49,7 +63,7 @@
 					Para isto, vamos até a pasta laradock/nginx/sites e abrimos o arquivo default.conf<br>
 
 					Nele trocaremos o valor de root como no exemplo:<br>
-					<textarea readonly rows=10 class="form-control">
+					<textarea readonly rows=3 class="form-control">
     server_name localhost;
     root /var/project_name/public;
     index index.php index.html index.htm;
@@ -60,6 +74,7 @@
 					Isto significa que o servidor nginx já está apontando para seu projeto!<br>
 
 				</p>
+				<hr>
 			</div><!--/col-->
 		</div><!--/row-->
 	</div><!--/container-->
