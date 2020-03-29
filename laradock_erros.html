@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="js/bootstrap.min.css">
+
+    <title>INFOPETS(DEV)</title>
+  </head>
+  <body>
+	<div class="container">
+		<div class="row">
+			<div class="col-2">
+				<nav class="nav flex-column"  id="div_nav">
+				</nav>
+			</div><!--/col-->
+			<div class="col-6">
+				<h1>Laradock</h1>
+				<h2>Erros</h2>
+				<p>
+					Aqui estão alguns dos erros mais comuns do laradock e como tentar contorná-los!
+				</p>
+				<hr>
+				<p>
+				
+					<textarea readonly rows=10 class="form-control">
+				
+Building mysql
+Step 1/10 : ARG MYSQL_VERSION
+Step 2/10 : FROM mysql:${MYSQL_VERSION}
+ERROR: Service 'mysql' failed to build: Get https://registry-1.docker.io/v2/: net/http: request canceled (Client.Timeout exceeded while awaiting headers)
+					</textarea>
+					Erro relacionado ao proxy. Corrigimos este problema reiniciando o Docker<br>
+					<input type="text" value="service docker restart" readonly class="form-control"/><br>
+
+					<hr>
+					<textarea readonly rows=10 class="form-control">
+ERROR: for phpmyadmin  Cannot start service phpmyadmin: driver failed programming external connectivity on endpoint laradock_phpmyadmin_1 (afad43f4b464121fc8ea90ebee11c23ab8f6469b886ec2c11231cbf8fdc6fbf2): Bind for 0.0.0.0:8080 failed: port is already allocated
+					</textarea>
+
+					O phpmyadmim não pode subir na porta 80 pois ela já está em uso (provavelmente pelo nginx).
+					Acesse o arquivo .env na pasta laradock, encontre a sessão ### PHP MY ADMIN ### e mude a porta do phpmyadmim (PMA_PORT) como no exemplo abaixo:
+					<textarea readonly rows=10 class="form-control">
+### PHP MY ADMIN ###
+
+# Credentials/Port:
+
+PMA_USER=default
+PMA_PASSWORD=secret
+PMA_ROOT_PASSWORD=secret
+PMA_PORT=8081
+					</textarea>
+					Após esta configuração o phpmyadmim será acessível pelo localhost:8081
+					<hr>
+
+					 Acesse o bash da workspace do laradock, isto é, acessar o terminal da máquina virtual laradock:<br>
+					<input type="text" value="git clone https://github.com/Laradock/laradock.git laradock" readonly class="form-control"/><br>
+
+					Acesse a pasta laradock:<br>
+					<input type="text" value="cd laradock" readonly class="form-control"/><br>
+
+					Renomeie o arquivo env-example para .env:<br>
+					<input type="text" value="cp env-example .env" readonly class="form-control"/><br>
+
+					Suba o container nginx(servidor php) para testar:<br>
+					<input type="text" value="docker-compose up -d nginx" readonly class="form-control"/><br>
+					Nota: É normal que a primeira execução do container demore, pois quando executada pela primeira vez, o docker baixa a imagem do container e, dependendo da conexão, pode demorar. As próximas execuções serão mais rápidas pois os arquivos já terão sido baixados!<br>
+					Se tudo estiver ok, ao acessar o localhost:80 pelo navegador você deverá ver uma página como esta<br>
+					<img src="nginx.png" class="img-fluid"><br>
+					Isto significa que o servidor nginx está online!<br>
+
+					Para encerrar o(s) container(s) execute:<br>
+					<input type="text" value="docker-compose stop" readonly class="form-control"/><br>
+
+				</p>
+			</div><!--/col-->
+		</div><!--/row-->
+	</div><!--/container-->
+    <!-- Optional JavaScript -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/menu.js"></script>
+  </body>
+</html>

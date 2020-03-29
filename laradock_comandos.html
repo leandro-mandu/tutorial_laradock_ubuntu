@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="js/bootstrap.min.css">
+
+    <title>INFOPETS(DEV)</title>
+  </head>
+  <body>
+	<div class="container">
+		<div class="row">
+			<div class="col-2">
+				<nav class="nav flex-column"  id="div_nav">
+				</nav>
+			</div><!--/col-->
+			<div class="col-6">
+				<h1>Laradock</h1>
+				<h2>Comandos</h2>
+				<p>
+					Para utilizar os vários serviços do laradock e do Docker, você precisará utilizar o bash, ou seja, terminal.<br>
+					O Docker funciona como uma máquina virtual e seus containers são como SOs rodando em um compudaror à parte, por isso para executar determinados comandos você deverá acessar o bash (terminal) da máquina referente.<br>
+					Por exemplo, para rodar comandos mysql via terminal você precisará acessar o bash da máquina virtual mysql. Para executar comandos do Laravel você precisará acessar o bash na maquina virtual laravel.
+				</p>
+				<hr>
+				<h2>Criando um projeto Laravel</h2>
+				<p>
+					Abra o terminal e acesse a pasta do laradock:<br>
+					<input type="text" value="cd laradock" readonly class="form-control"/><br>
+
+					Antes de iniciar um projeto Laravel, precisamos subir os container que usaremos no projeto:
+					<input type="text" value="docker-compose up -d nginx mysql phpmyadmin" readonly class="form-control"/><br>
+
+					 Acesse o bash da workspace do laradock, isto é, acessar o terminal da máquina virtual laradock:<br>
+					<input type="text" value="sudo docker exec -it laradock_workspace_1 bash" readonly class="form-control"/><br>
+
+					Você verá que o terminal ficou parecido com isso:<br>
+					<input type="text" value="root@caefb877725f:/var/www#" readonly class="form-control"/>
+					Significa que você está logado como root na máquina virtual caefb877725f na pasta www que é a pasta root do servidor nginx, é nela que estará seu projeto. Esta pasta na máquina virtual aponta para o mesmo nível da sua pasta laradock na máquina real, logo seu projeto estará na mesma pasta que a pasta laradock.<br>
+
+					Para criar um projeto laravel, utilize o composer como abaixo, substituindo project_name pelo nome do seu projeto:<br>
+					<input type="text" value="composer create-project laravel/laravel project_name" readonly class="form-control"/>
+					Este processo pode demorar um pouco quando executado pela primeira vez, pois ele baixa todas as bibliotecas e dependencias do laravel para serem utilizadas.<br>
+					<br>
+					Tudo quase pronto. Após o projeto estar criado, para que ele apareça no navegador precisamos fazer com que o nginx aponte para a pasta /public que está dentro da pasta do seu projeto.<br>
+					Para isto, vamos até a pasta laradock/nginx/sites e abrimos o arquivo default.conf<br>
+
+					Nele trocaremos o valor de root como no exemplo:<br>
+					<textarea readonly rows=10 class="form-control">
+    server_name localhost;
+    root /var/project_name/public;
+    index index.php index.html index.htm;
+					</textarea>
+					E então paramos os containers e o reiniciamos para aplicar as alterações!<br>
+					Se tudo estiver ok, ao acessar o localhost:80 pelo navegador você deverá ver uma página como esta<br>
+					<img src="laravel_new_project.png" class="img-fluid"><br>
+					Isto significa que o servidor nginx já está apontando para seu projeto!<br>
+
+				</p>
+			</div><!--/col-->
+		</div><!--/row-->
+	</div><!--/container-->
+    <!-- Optional JavaScript -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/menu.js"></script>
+  </body>
+</html>
+

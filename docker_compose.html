@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="js/bootstrap.min.css">
+
+    <title>INFOPETS(DEV)</title>
+  </head>
+  <body>
+	<div class="container">
+		<div class="row">
+			<div class="col-2">
+				<nav class="nav flex-column"  id="div_nav">
+				</nav>
+			</div><!--/col-->
+			<div class="col-6">
+				<h1>Docker</h1>
+				<h2>Compose</h2>
+				<p>
+					Permite executar comandos de automação, como os comando para subir os containers necessários.
+				</p>
+				<p>
+					A instalação do Docker-compose no Ubuntu é fácil, e antes é nescessária a instalação do Docker, cujo procedimento pode ser acessado pelo menu principal do blog.<br>
+					<br>
+					Abra o terminal e atualize os pacotes:<br>
+					<input type="text" value="apt-get update" readonly class="form-control"/><br>
+
+					Baixe do Github a ultima versão estável do Docker-compose, no momento da criação deste tutorial é a 1.25.4:<br>
+					<input type="text" value='curl -L "https://github.com/docker/compose/releases/download/1.25.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose' readonly class="form-control"/><br>
+
+					Aplique permissões nescessárias para a execução:<br>
+					<input type="text" value='chmod +x /usr/local/bin/docker-compose' readonly class="form-control"/><br>
+
+					Verifique se foi bem sucedido verificando a versão do Docker-compose que foi instalada:<br>
+					<input type="text" value="docker-compose --version" readonly class="form-control"/><br>
+
+				</p>
+			</div><!--/col-->
+		</div><!--/row-->
+	</div><!--/container-->
+    <!-- Optional JavaScript -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/menu.js"></script>
+  </body>
+</html>

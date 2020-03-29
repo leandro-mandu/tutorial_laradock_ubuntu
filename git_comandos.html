@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="js/bootstrap.min.css">
+
+    <title>INFOPETS(DEV)</title>
+  </head>
+  <body>
+	<div class="container">
+		<div class="row">
+			<div class="col-2">
+				<nav class="nav flex-column"  id="div_nav">
+				</nav>
+			</div><!--/col-->
+			<div class="col-6">
+				<h1>GIT</h1>
+				<h2>Comandos</h2>
+				<p>
+					Antes de prosseguir com nosso projeto, iremos iniciá-lo no Github, assim ele ficará seguro e devidamente armazenado para posteriores mudanças. Para isso é importante que, caso não tenha, crie uma conta no Github.<br>
+				</p>
+				<p>
+					Siga os passos em https://github.com para criar um novo repositório com o mesmo nome do projeto.<br>
+					<br>
+					Abra o terminal e entre na pasta de seu projeto:<br>
+					<input type="text" value="cd project_name" readonly class="form-control"/><br>
+
+					Inicie o repositório:<br>
+					<input type="text" value="git init" readonly class="form-control"/><br>
+
+					Faça o commit dos arquivos:<br>
+					<input type="text" value='git commit -am "descricao ex: primeiro comit"' readonly class="form-control"/><br>
+
+					Adicione seu repositorio:<br>
+					<input type="text" value='git remote add origin git@github.com:user_name/project_name.git' readonly class="form-control"/><br>
+
+git remote add upstream git@github.com:da2k/curso-javascript-ninja.git
+
+
+					Antes de enviar os arquivos pela primeira vez, é necessário criar uma chave SSH para autenticar sua conexão com o github:<br>
+					<input type="text" value='ssh-keygen -t rsa -b 4096 -C "your_email@example.com"' readonly class="form-control"/><br>
+
+					O Git irá perguntar onde deseja guardar sua chave, basta indicar um caminho:<br>
+					<input type="text" value='/home/.ssh/id_rsa' readonly class="form-control"/><br>
+
+					Inicie o ssh-agent em segundo plano:<br>
+					<input type="text" value='eval "$(ssh-agent -s)"' readonly class="form-control"/><br>
+
+					Adicione sua chave SSH criada a pouco ao ssh-agent:<br>
+					<input type="text" value='ssh-add ~/.ssh/id_rsa' readonly class="form-control"/><br>
+
+					Copie a chave SSH publica criada e cole no site do git.<br>
+
+
+					Inicie o repositório local:<br>
+					<input type="text" value="git init" readonly class="form-control"/><br>
+
+					Adicione seu repositorio do github:<br>
+					<input type="text" value='git remote set-url origin https://github.com/user_name/project_name' readonly class="form-control"/><br>
+
+					Adicione os arquivos:<br>
+					<input type="text" value='git add *' readonly class="form-control"/><br>
+
+					Verifique os arquivos:<br>
+					<input type="text" value='git status' readonly class="form-control"/><br>
+
+					Faça o commit dos arquivos:<br>
+					<input type="text" value='git commit -am "descricao ex: primeiro comit"' readonly class="form-control"/><br>
+
+					Sincrinoza os commits com Pull:<br>
+					<input type="text" value='git pull origin master' readonly class="form-control"/><br>
+
+					E, por último, empurre os arquivos para o repositório com Push:<br>
+					<input type="text" value='git push origin master' readonly class="form-control"/><br>
+
+
+					<hr>
+
+					<textarea readonly rows=10 class="form-control">
+<!doctype html>
+<html lang='pt-br'>
+  <head>
+    <title>StackOverflow pt</title>
+  </head>
+  <body>
+    <!-- ... -->
+  </body>
+</html>
+					</textarea>
+				</p>
+			</div><!--/col-->
+		</div><!--/row-->
+	</div><!--/container-->
+    <!-- Optional JavaScript -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/menu.js"></script>
+  </body>
+</html>

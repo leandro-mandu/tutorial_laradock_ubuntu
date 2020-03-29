@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="js/bootstrap.min.css">
+
+    <title>INFOPETS(DEV)</title>
+  </head>
+  <body>
+	<div class="container">
+		<div class="row">
+			<div class="col-2">
+				<nav class="nav flex-column"  id="div_nav">
+				</nav>
+			</div><!--/col-->
+			<div class="col-6">
+				<h1>Docker</h1>
+				<h2>Setup</h2>
+				<p>
+					Permite a organização dos serviços utilizados no desenvolvimento separados em containers, de forma que se consegue criar um ambiente de desenvolvimento idêntico em diferentes computadores, facilitando a configuração do ambiente de trabalho.
+				</p>
+				<p>
+					Em nosso projeto utilizamos o Docker para rodar containers, que são como máquinas virtuais, porém mais leves, isto permite isolar os serviços necessários para o desenvolvimento e agilizar as configurações necessárias.<br>
+					<br>
+					A instalação do Docker no Ubuntu é fácil, e antes é nescessária a instalação do Git, cujo procedimento pode ser acessado pelo menu principal do blog.<br>
+					<br>
+					Abra o terminal e atualize os pacotes:<br>
+					<input type="text" value="apt-get update" readonly class="form-control"/><br>
+
+					Instale o Docker:<br>
+					<input type="text" value="apt-get install docker.io" readonly class="form-control"/><br>
+
+					Verifique se foi bem sucedido verificando a versão do Docker que foi instalada:<br>
+					<input type="text" value="docker --version" readonly class="form-control"/><br>
+
+					Rode um "Hello World" para verificar se está tudo ok:<br>
+					<input type="text" value="docker run hello-world" readonly class="form-control"/><br>
+
+					Se tudo estiver ok, o resultado será algo como:<br>
+					<textarea readonly rows=10 class="form-control">
+Hello from Docker!
+This message shows that your installation appears to be working correctly.
+
+To generate this message, Docker took the following steps:
+ 1. The Docker client contacted the Docker daemon.
+ 2. The Docker daemon pulled the "hello-world" image from the Docker Hub.
+    (amd64)
+ 3. The Docker daemon created a new container from that image which runs the
+    executable that produces the output you are currently reading.
+ 4. The Docker daemon streamed that output to the Docker client, which sent it
+    to your terminal.
+
+To try something more ambitious, you can run an Ubuntu container with:
+ $ docker run -it ubuntu bash
+
+Share images, automate workflows, and more with a free Docker ID:
+ https://hub.docker.com/
+
+For more examples and ideas, visit:
+ https://docs.docker.com/get-started/					</textarea>
+				</p>
+			</div><!--/col-->
+		</div><!--/row-->
+	</div><!--/container-->
+    <!-- Optional JavaScript -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/menu.js"></script>
+  </body>
+</html>

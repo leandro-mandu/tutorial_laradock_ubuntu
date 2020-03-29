@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="js/bootstrap.min.css">
+
+    <title>INFOPETS(DEV)</title>
+  </head>
+  <body>
+	<div class="container">
+		<div class="row">
+			<div class="col-2">
+				<nav class="nav flex-column"  id="div_nav">
+				</nav>
+			</div><!--/col-->
+			<div class="col-6">
+				<h1>Laradock</h1>
+				<h2>Setup</h2>
+				<p>
+					Conjunto de containers(serviços) que contém, dentre vários, os containers que iremos utilizar em nosso projeto.
+				</p>
+				<p>
+					Em nosso projeto utilizamos o Docker para rodar containers, que são como máquinas virtuais.<br>
+					O Laradock é um conjunto destes containers, ele contém, dentre vários, os containers nginx(servidor php), mysql(banco de dados) e phpmyadmin(gerenciador de banco de dados) que usaremos em nosso projeto.
+					<br>
+					Utilizar containers do laradock através do Docker no Ubuntu é fácil, abra o terminal e execute os códigos abaixo. Aconselhamos a não copiar e colar, e sim digitar todos os comandos, assim você estará aprendendo muito mais!<br>
+					<br>
+					Abra o terminal e atualize os pacotes:<br>
+					<input type="text" value="apt-get update" readonly class="form-control"/><br>
+
+					O Laradock está disponível no Github, então usaremos o Git para cloná-lo, isto é, baixá-lo e salvar na pasta laradock:<br>
+					<input type="text" value="git clone https://github.com/Laradock/laradock.git laradock" readonly class="form-control"/><br>
+
+					Acesse a pasta laradock:<br>
+					<input type="text" value="cd laradock" readonly class="form-control"/><br>
+
+					Renomeie o arquivo env-example para .env:<br>
+					<input type="text" value="cp env-example .env" readonly class="form-control"/><br>
+
+					Suba o container nginx(servidor php) para testar:<br>
+					<input type="text" value="docker-compose up -d nginx" readonly class="form-control"/><br>
+					Nota: É normal que a primeira execução do container demore, pois quando executada pela primeira vez, o docker baixa a imagem do container e, dependendo da conexão, pode demorar. As próximas execuções serão mais rápidas pois os arquivos já terão sido baixados!<br>
+					Se tudo estiver ok, ao acessar o localhost:80 pelo navegador você deverá ver uma página como esta<br>
+					<img src="nginx.png" class="img-fluid"><br>
+					Isto significa que o servidor nginx está online!<br>
+
+					Para encerrar o(s) container(s) execute:<br>
+					<input type="text" value="docker-compose stop" readonly class="form-control"/><br>
+
+				</p>
+			</div><!--/col-->
+		</div><!--/row-->
+	</div><!--/container-->
+    <!-- Optional JavaScript -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/menu.js"></script>
+  </body>
+</html>
