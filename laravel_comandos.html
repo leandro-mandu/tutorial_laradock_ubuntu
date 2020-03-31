@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Comandos do Laravel e MySql para desenvolver uma aplicação com docker e laradock no Ubuntu">
+    <meta name="keywords" content="mysql, conexao, banco de dados, compose, laravel, laradock, docker, container, git, github, ubuntu">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="js/bootstrap.min.css">
+
+    <title>Laravel - Tutorial Docker Laradock Git no Ubuntu</title>
+  </head>
+  <body>
+	<nav class="navbar navbar-expand-lg navbar-light bg-light" id="div_nav_top">
+  		<a class="navbar-brand" href="index.html">Home</a>
+  		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    		<span class="navbar-toggler-icon"></span>
+  		</button>
+
+  		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+    		<ul class="navbar-nav mr-auto" id="ul_nav_top">
+      			<li class="nav-item active">
+        			<a class="nav-link" href="https://github.com/leandro-mandu">Idealizador</a>
+      			</li>
+    		</ul>
+  		</div>
+	</nav>
+	<div class="container">
+		<div class="row">
+			<div class="col-2">
+				<nav class="nav flex-column"  id="div_nav">
+				</nav>
+			</div><!--/col-->
+			<div class="col-6">
+				<h1>Laravel</h1>
+				<h2>Continuando os trabalhos</h2>
+				<p>
+					Com os containers nginx, mysql e phpmyadmin rodando e a aplicação funcionando corretamente, seja após clonada do github ou recem criada, iremos fazer as seguintes implementações:<br>
+					1-Sistema de autenticação com Auth incluindo telas de login, cadastro e home;<br>
+					2-Crud de categorias e artigos como em um blog, com telas de lista com botão de apagar o registro, pesquisa, visão do registro, cadastro e alteração.
+				</p>
+				<p>
+					Execute o bash do laradock:<br>
+					<input type="text" value="docker exec -it laradock_workspace_1 bash" readonly class="form-control"/><br>
+
+					Seu terminal ficará parecido com isto:<br>
+					<input type="text" value="root@caefb877725f:/var/www#" readonly class="form-control"/><br>
+
+					Entre na pasta de seu projeto:<br>
+					<input type="text" value="cd project_name" readonly class="form-control"/><br>
+
+					Iremos adicionar o sistema de autenticação que o Laravel já traz pronto para nós, mas antes precisamos instalar o UI, que é uma dependência do Auth:<br>
+					<input type="text" value="composer require laravel/ui" readonly class="form-control"/>
+					Este comando pode demorar um pouco pois irá baixar alguns pacotes.<br>
+					<br>
+					O próximo passo é instalar de fato o Auth, junto com todas as telas(views), templates, tabelas e demais arquivos nescessários:<br>
+					<input type="text" value='php artisan ui vue --auth' readonly class="form-control"/><br>
+
+					Agora acesse localhost/register no seu navegador de preferência, e voilà! Temos uma tela de cadastro, não muito bonita, porém totalmente funcional! O mesmo pode se dizer sobre a tela de /login!<br>
+					<img src="laravel_register.png" class="img-fluid"><br>
+
+				</p>
+				<hr>
+				
+				<h1>Banco de dados</h1>
+				<h2>Aqui entra o MySQL</h2>
+				<p>
+					De nada nos adianta uma tela de cadastro se não tivermos onde salvar os dados. Inclusive, se você tentar realizar um cadastro receberá como resposta um glorioso ERRO SQLSTATE[HY000] [2002].<br>
+					Isto porque não definimos no banco as tabelas que armazenarão estes dados.<br>
+					Aliás, se quer definimos um banco!<br>
+					Inclusive, ainda nem configuramos a conexão com o servidor!<br>
+					Mas calma, isto é fácil de resolver.
+					<br>
+					A primeira coisa a fazer é acessar o bash do mysql para criarmos um banco de dados para nossa aplicação.<br>
+					Saia do bash atual com o comando exit voltando assim ao terminal do Ubuntu.
+					<br>
+					Execute o bash do mysql:<br>
+					<input type="text" value="docker exec -it laradock_mysql_1 bash" readonly class="form-control"/><br>
+
+					Seu terminal ficará parecido com isto:<br>
+					<input type="text" value="root@b3aa8465a022:/#" readonly class="form-control"/><br>
+					Significando que você está logado como root no container servidor de banco de dados.<br>
+					<br>
+	
+					Vamos nos conectar ao mysql com o seguinte comando:<br>
+					<input type="text" value="mysql -u root -p" readonly class="form-control"/><br>
+					O terminal pedirá a senha do usuário root que, por default, também é root.<br>
+					<br>
+
+					Com o comando abaixo podemos listar todos os bancos de dados presentes:<br>
+					<input type="text" value="show databases;" readonly class="form-control"/><br>
+
+					Como resposta temos uma lista de bancos presentes no servidor:<br>
+					<img src="show_databases.png" class="img-fluid"><br>
+
+					Em versões mais recentes o mysql pode não permitir que aplicações como o nosso querido projeto acessem o banco de dados diretamente com o usuário root.<br>
+					Então vamos nos prevenir criando um novo usuário:<br>
+					<input type="text" value="CREATE USER 'usuario'@'localhost' IDENTIFIED BY 'senha';" readonly class="form-control"/><br>
+
+					E dar-lhe todas as permissões:<br>
+					<input type="text" value="GRANT ALL PRIVILEGES ON *.* TO 'usuario'@'localhost';" readonly class="form-control"/><br>
+					É possivel criar um usuário com menos permissões, como por exemplo somente permissão para leitura e escrita, mas para nosso projeto iremos mecher na estrutura do banco, apagar e alterar tabelas e registros, então concedemos permissão total, afinal, estamos em um ambiente de desenvolvimento.<br>
+					<br>
+
+					Agora, vamos criar uma base esclusiva para nossa aplicação, chamada de "laravel" para facilitar:<br>
+					<input type="text" value="CREATE DATABASE laravel;" readonly class="form-control"/><br>
+
+					Novamente com o comando show databases, agora podemos notar a presença da base laravel:<br>
+					<input type="text" value="show databases;" readonly class="form-control"/><br>
+					<img src="show_databases_with_laravel.png" class="img-fluid"><br>
+					<br>
+					
+					Base criada, usuário configurado, agora é hora de...
+				</p>
+				<hr>
+				
+				<h1>Migrations</h1>
+				<h2>Configurar conexão com banco e criar as tabelas</h2>
+				<p>
+					Navegue até a raiz do seu projeto e abra o arquivo .env, é ele que guarda estas configurações.<br>
+					Dentro do arquivo .env procure pela sessão de conexão com banco de dados e deixe assim:
+					<textarea readonly rows=8 class="form-control">
+
+DB_CONNECTION=mysql
+DB_HOST=laradock_mysql_1
+DB_PORT=3306
+DB_DATABASE=laravel
+DB_USERNAME=usuario
+DB_PASSWORD=senha
+
+					</textarea>
+
+					Sim, nosso usuário se chama "usuário" e sua senha se chama "senha", foi como definimos ao criá-lo.<br>
+					Salve o arquivo.<br>
+					Os mesmos dados de acesso podem ser utilizados para acessar o banco de dados via phpmyadmin.<br>
+					<br>
+					Execute novamente o bash do laradock:<br>
+					<input type="text" value="docker exec -it laradock_workspace_1 bash" readonly class="form-control"/><br>
+
+					Seu terminal ficará parecido com isto:<br>
+					<input type="text" value="root@caefb877725f:/var/www#" readonly class="form-control"/><br>
+					<br>
+					
+					Dentro da raiz de nosso projeto, temos a pasta database. Dentro dela temos a migrations, que por sua vez comporta os arquivos de criação das tabelas do banco de dados.<br>
+					O Artisan utiliza estes arquivos para criar na base que criamos, a "laravel", as tabelas que comportarão os dados principalmente dos usuários, assim nossa tela de cadastros irá enfim ter uma utilidade!<br>
+					<br>
+					Acesse a pasta do projeto e execute o comando:<br>
+					<input type="text" value="php artisan migrate" readonly class="form-control"/><br>
+
+					Pronto, já podemos terminar aquele cadastro...<br>
+					<img src="on_register.png" class="img-fluid"><br>
+
+					E ver pelo phpMyAdmin que está tudo funcionando!<br>
+					<img src="base_register.png" class="img-fluid"><br>
+
+				</p>
+				<hr>
+			</div><!--/col-->
+		</div><!--/row-->
+	</div><!--/container-->
+    <!-- Optional JavaScript -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/menu.js"></script>
+  </body>
+</html>

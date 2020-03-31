@@ -26,6 +26,10 @@ var json = [
 {
     "id": "git_comandos",
     "title": "Guardar Projeto"
+},
+{
+    "id": "laravel_comandos",
+    "title": "Laravel: Continuando"
 }
 ];
 
