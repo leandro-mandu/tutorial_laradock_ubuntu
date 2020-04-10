@@ -30,6 +30,22 @@ var json = [
 {
     "id": "laravel_comandos",
     "title": "Laravel: Continuando"
+},
+{
+    "id": "migrations",
+    "title": "Migrations"
+},
+{
+    "id": "models",
+    "title": "Models (terminar colocando configurações da model)"
+},
+{
+    "id": "views",
+    "title": "Views (terminar colocando configurações da view e template)"
+},
+{
+    "id": "controllers",
+    "title": "Controllers (terminar colocando configurações e rotas)"
 }
 ];
 

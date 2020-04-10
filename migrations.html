@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Aprenta a modelar o banco de dados através de migrations para criar uma aplicação laravel no Ubuntu!">
+    <meta name="keywords" content="banco, mysql, workbench, laravel, laradock, docker, container, git, github, ubuntu">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="js/bootstrap.min.css">
+
+    <title>Migrations - Estrutura do banco de dados - Tutorial Docker Laradock Git no Ubuntu</title>
+  </head>
+  <body>
+	<nav class="navbar navbar-expand-lg navbar-light bg-light" id="div_nav_top">
+  		<a class="navbar-brand" href="index.html">Home</a>
+  		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    		<span class="navbar-toggler-icon"></span>
+  		</button>
+
+  		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+    		<ul class="navbar-nav mr-auto" id="ul_nav_top">
+      			<li class="nav-item active">
+        			<a class="nav-link" href="https://github.com/leandro-mandu">Idealizador</a>
+      			</li>
+    		</ul>
+  		</div>
+	</nav>
+	<div class="container">
+		<div class="row">
+			<div class="col-2">
+				<nav class="nav flex-column"  id="div_nav">
+				</nav>
+			</div><!--/col-->
+			<div class="col-6">
+				<h1>Migrations</h1>
+				<h2>Estrutura do banco de dados</h2>
+				<p>
+					Antes de prosseguirmos com o projeto, precisamos definir as tabelas do nosso banco de dados.<br>
+					Como dito anteriormente, nosso projeto será como um blog, com artigos divididos por categorias. Logo, precisaremos criar uma tabela de categorias e uma de artigos.<br>
+					Como também dito anteriormente, dentro da pasta database/migrations ficam os arquivos responsáveis por definir as tabelas do nosso banco. Cada tabela tem seu arquivo próprio, e abaixo aprenderemos como criar e modificar estes arquivos.<br>
+				<br>
+
+					Abra o terminal e acesse a pasta do laradock:<br>
+					<input type="text" value="cd laradock" readonly class="form-control"/><br>
+
+					Antes de iniciar um projeto Laravel, precisamos subir os containers que usaremos no projeto:
+					<input type="text" value="docker-compose up -d nginx mysql phpmyadmin" readonly class="form-control"/><br>
+
+					 Acesse o bash da workspace do laradock, isto é, acessar o terminal da máquina virtual laradock:<br>
+					<input type="text" value="docker exec -it laradock_workspace_1 bash" readonly class="form-control"/><br>
+
+					Você verá que o terminal ficou parecido com isso:<br>
+					<input type="text" value="root@caefb877725f:/var/www#" readonly class="form-control"/>
+
+					Acesse a pasta do projeto:<br>
+					<input type="text" value="cd project_name" readonly class="form-control"/><br>
+
+					Criaremos as models Categoria e Artigo. Usando o -m no comando serão criados também as migrations.<br>
+					As Models são a camada de abstração dos dados do banco, ou seja, são as classes que se conectam com o banco para fazer e recuperar registros:<br>
+					<input type="text" value="php artisan make:model Categoria -m" readonly class="form-control"/>
+					<input type="text" value="php artisan make:model Artigo -m" readonly class="form-control"/>
+					<br>
+					Tudo quase pronto. Após estes comandos você pode reparar que na pasta app/ do projeto há um arquivo para cada uma das tabelas criadas, e na pasta database/migrations/ também. É nos arquivos da pasta migrations que iremos trabalhar!<br>
+					Dica: É normal o nome do arquivo migration possuir uma data de criação, é dessa forma que o laravel adminstra a criação de tabelas para criá-las na ordem certa, então não altere os nomes destes arquivos.<br>
+					<br>
+
+					Abra o arquivo create_categorias_table.php. Na função up() deixe como abaixo, acrescentando os seguintes campos:<br>
+					<textarea readonly rows=12 class="form-control">
+    public function up()
+    {
+        Schema::create('categorias', function (Blueprint $table) {
+            $table->id();
+            $table->timestamps();
+            $table->string('title', 200);
+            $table->string('keywords', 200);
+            $table->string('description');
+        });
+    }
+					</textarea><br>
+					
+					Abra o arquivo create_artigos_table.php. Na função up() deixe como abaixo. Note que aqui temos um campo FK(Foreign Key) que faz referência ao campo id, isto indicará a qual categoria o artigo pertence:<br>
+					<textarea readonly rows=16 class="form-control">
+    public function up()
+    {
+         Schema::create('artigos', function (Blueprint $table) {
+            $table->id();
+            $table->timestamps();
+            $table->bigInteger('categoria_id')->unsigned();
+            $table->foreign('categoria_id')->references('id')->on('categorias');
+            $table->string('title', 200);
+            $table->string('image', 200)->nullable(); //que pode ser nulo
+            $table->string('keywords', 200);
+            $table->string('description');
+            $table->string('content');
+        });
+   }
+					</textarea><br>
+
+					Salvamos os arquivos e para finalizar a criação das tabelas executamos o comando no terminal:<br>
+					<input type="text" value="php artisan migrate" readonly class="form-control"/><br>
+					Se tudo estiver ok, ao acessar o phpMyAdmin você verá as tabelas criadas:<br>
+					<img src="phpMyAdmin_tables.png" class="img-fluid"><br>
+
+				</p>
+				<hr>
+			</div><!--/col-->
+		</div><!--/row-->
+	</div><!--/container-->
+    <!-- Optional JavaScript -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/menu.js"></script>
+  </body>
+</html>
+

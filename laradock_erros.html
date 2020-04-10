@@ -70,25 +70,6 @@ PMA_PORT=8081
 					Após esta configuração o phpmyadmim será acessível pelo localhost:8081
 					<hr>
 
-					 Acesse o bash da workspace do laradock, isto é, acessar o terminal da máquina virtual laradock:<br>
-					<input type="text" value="git clone https://github.com/Laradock/laradock.git laradock" readonly class="form-control"/><br>
-
-					Acesse a pasta laradock:<br>
-					<input type="text" value="cd laradock" readonly class="form-control"/><br>
-
-					Renomeie o arquivo env-example para .env:<br>
-					<input type="text" value="cp env-example .env" readonly class="form-control"/><br>
-
-					Suba o container nginx(servidor php) para testar:<br>
-					<input type="text" value="docker-compose up -d nginx" readonly class="form-control"/><br>
-					Nota: É normal que a primeira execução do container demore, pois quando executada pela primeira vez, o docker baixa a imagem do container e, dependendo da conexão, pode demorar. As próximas execuções serão mais rápidas pois os arquivos já terão sido baixados!<br>
-					Se tudo estiver ok, ao acessar o localhost:80 pelo navegador você deverá ver uma página como esta<br>
-					<img src="nginx.png" class="img-fluid"><br>
-					Isto significa que o servidor nginx está online!<br>
-
-					Para encerrar o(s) container(s) execute:<br>
-					<input type="text" value="docker-compose stop" readonly class="form-control"/><br>
-
 				</p>
 			</div><!--/col-->
 		</div><!--/row-->
