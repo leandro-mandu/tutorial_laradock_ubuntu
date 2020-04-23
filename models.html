@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Aprenta sobre Models e criar uma aplicação laravel literalmente do zero no Ubuntu!">
+    <meta name="keywords" content="model, laravel, laradock, docker, container, git, github, ubuntu">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="js/bootstrap.min.css">
+
+    <title>Models - Tutorial Docker Laradock Git no Ubuntu</title>
+  </head>
+  <body>
+	<nav class="navbar navbar-expand-lg navbar-light bg-light" id="div_nav_top">
+  		<a class="navbar-brand" href="index.html">Home</a>
+  		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    		<span class="navbar-toggler-icon"></span>
+  		</button>
+
+  		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+    		<ul class="navbar-nav mr-auto" id="ul_nav_top">
+      			<li class="nav-item active">
+        			<a class="nav-link" href="https://github.com/leandro-mandu">Idealizador</a>
+      			</li>
+    		</ul>
+  		</div>
+	</nav>
+	<div class="container">
+		<div class="row">
+			<div class="col-2">
+				<nav class="nav flex-column"  id="div_nav">
+				</nav>
+			</div><!--/col-->
+			<div class="col-6">
+				<h1>Model</h1>
+				<h2>Um pouco mais...</h2>
+				<p>
+					A model representa a tabela no banco de dados cujo seu nome faz referência. Na página anterior já criamos as models para nossas tabelas de artigo e categoria.
+				</p>
+				<p>
+					A estrutura básica da model recém criada é esta:<br>
+          <textarea readonly rows=8 class="form-control">
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Artigo extends Model
+{
+}
+					</textarea>
+					<br>
+					Nesta classe definiremos os campos que poderão (fillable) ou não (guarded) ser inseridos e alterados por usuários, isto trará mais segurança para o nosso sistema.<br>
+          <textarea readonly rows=10 class="form-control">
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Artigo extends Model
+{
+  protected $fillable = ['categoria_id','title','image','keywords','description','content'];
+  protected $guarded = ['id', 'created_at', 'update_at'];
+}
+					</textarea>
+          <br>
+          E também para Categoria:<br>
+          <textarea readonly rows=10 class="form-control">
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Categoria extends Model
+{
+  protected $fillable = ['title','keywords','description'];
+  protected $guarded = ['id', 'created_at', 'update_at'];
+}
+					</textarea>
+					<br>
+          A classe model pode ser personalizada ainda mais, mas por enquanto isto basta.<br>
+          No próximo passo criaremos um Middleware, ou seja, um filtro para validar os dados enviados pelo formulário, para que não tenhamos problemas como, por exemplo, tipos de inserção incorretas.
+				</p>
+				<hr>
+			</div><!--/col-->
+		</div><!--/row-->
+	</div><!--/container-->
+    <!-- Optional JavaScript -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/menu.js"></script>
+  </body>
+</html>

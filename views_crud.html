@@ -1,0 +1,492 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Aprenta sobre Views e criar telas e formulários no Laravel!">
+    <meta name="keywords" content="view, formulário, cadastro, laravel, laradock, docker, container, git, github, ubuntu">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="js/bootstrap.min.css">
+
+    <title>Crud Views - Tutorial Docker Laradock Git no Ubuntu</title>
+  </head>
+  <body>
+	<nav class="navbar navbar-expand-lg navbar-light bg-light" id="div_nav_top">
+  		<a class="navbar-brand" href="index.html">Home</a>
+  		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    		<span class="navbar-toggler-icon"></span>
+  		</button>
+
+  		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+    		<ul class="navbar-nav mr-auto" id="ul_nav_top">
+      			<li class="nav-item active">
+        			<a class="nav-link" href="https://github.com/leandro-mandu">Idealizador</a>
+      			</li>
+    		</ul>
+  		</div>
+	</nav>
+	<div class="container">
+		<div class="row">
+			<div class="col-2">
+				<nav class="nav flex-column"  id="div_nav">
+				</nav>
+			</div><!--/col-->
+			<div class="col-6">
+				<h1>Crud Views</h1>
+				<h2>Telas de cadastro e acesso aos dados</h2>
+				<p>
+					Vamos criar as telas de listagem, cadastro, alteração e exibição das controllers Categoria e Artigo.<br>
+          Para organizar melhor nosso código vamos criar dentro de resources/views pastas com o nome do controller a que as views pertencerão.<br>
+          Teremos então nossas views de Catgoria dentro de resources/views/categoria, e as views de Artigo em resources/views/artigo.<br>
+          Começando pela Categoria, iremos criar o arquivo index.blade.php, implementar o titulo e fazer um loop para exibir a lista de registros:
+<textarea readonly rows=16 class="form-control">
+  @extends('template')
+  @section('titulo'){!! 'Categorias' !!} @endsection
+  @section('conteudo')
+    @foreach($lista as $item)
+      {{$item->id}} | {{$item->title}} - {{$item->description}}<br>
+      <a href="{{route('categoria.edit', $item->id)}}">Alterar<i class="fa fa-pencil"></i></a>
+      <form style="display: inline-block;" method="POST" action="{{route('categoria.destroy', $item->id)}}"
+          onsubmit="return confirm('Confirma exclusão?')">
+          {{method_field('DELETE')}}{{ csrf_field() }}
+          <button type="submit">Excluir</button>
+      </form>
+      <hr>
+    @endforeach
+  @endsection
+</textarea><br>
+{{ csrf_field() }} inclui um campo oculto no formulário de exclusão, inclusão ou alteração. É um mecanismo de segurança do laravel para não aceitar formulários submetidos de outras fontes.<br>
+
+<br>
+Para chamar nossa tela vamos até a controller Categoria (App/Http/Controllers/CategoriaController.php)e criamos a função index, e dentro dela retornamos nossa view index:
+<textarea readonly rows=7 class="form-control">
+  public function index()
+  {
+      $lista = Categoria::all();//lista todas as categorias cadastradas
+      return view('categoria.index', compact('lista'));//retorna a view categoria.index.blade.php
+  }
+</textarea><br>
+
+<br>
+E o clicar no link categoria a rota localhost/categoria nos leva ao nosso método index da controller Categoria, este lista todas as categorias cadastradas no banco e envia para a view categoria/index que as exibe:
+<img src="categoria.png" class="img-fluid"><br>
+
+<br>
+Sim eu sei, não está aparecendo nada aí, e isso é simples de resolver, vamos agora criar o...
+
+				</p>
+        <hr>
+        <h2>Formulário de Cadastro</h2>
+				<p>
+          A view que conterá nosso formulário de cadasro será chamada pelo método create da controlle Categoria, então, assim como criamos a view index.blade.php e à chamamos no método index, criaremos a view create.blade.php para colocar nosso formulário.
+          Claro, vocẽ pode criar com o nome que desejar, estou fazendo desta forma para organizar o código de forma que cada função chame a view de mesmo nome.<br>
+
+          <br>
+          Criamos na pasta resources/views/categoria o arquivo create.blade.php e dentro dele colocaremos um simples formulário de cadastro e importaremos o template:
+<textarea readonly rows=28 class="form-control">
+  @extends('template')
+  @section('titulo'){!! 'Categorias - Cadastro' !!} @endsection
+  @section('conteudo')
+  <form method="post" action="{{route('categoria.store')}}" enctype="multipart/form-data">
+      {{ csrf_field() }}
+      <div class="form-group">
+        <label for="title">Nome</label>
+        <input type="text" name="title" id="title" class="form-control" required>
+      </div>
+
+      <div class="form-group">
+        <label for="keywords">Tags</label>
+        <input type="text" name="keywords" id="keywords" class="form-control" required>
+      </div>
+
+      <div class="form-group">
+        <label for="description">Descrição</label>
+        <textarea name="description" id="description" class="form-control" required />
+      </div>
+
+      <button type="submit" class="btn btn-warning" id="black">Cadastrar</button>
+  </form>
+  @endsection
+</textarea><br>
+
+          <br>
+          No Controller Categoria, vamos programar a função create para mostrar nossa view e a função store para salvá-la:
+<textarea readonly rows=18 class="form-control">
+  public function create()
+  {
+    return view('categoria.create');
+  }
+
+  public function store(Request $request, Categoria $categoria)
+  {
+    $insert = $categoria->create($request->all());
+    if ($insert)
+      return redirect()
+        ->route('categoria.index')
+        ->with('success', 'Categoria inserida com sucesso!');
+    return redirect()
+      ->back()
+      ->with('error', 'Falha ao inserir');
+  }
+
+</textarea><br>
+Aqui o método store setado no action do formulário envia os dados para a função store, por sua vez ela tenta salvar no banco.
+Caso tudo ocorra bem o método redireciona para a view index com uma mensagem de sucesso. Caso haja algum problema ou o formulário não passe pela validação (middleware) ele redireciona devolta ao formulário e apresenta uma mensagem de erro.<br>
+
+<br>
+Neste ponto já temos o formulário funcionando em http://localhost/categoria/create
+<img src="categoria_create.png" class="img-fluid"><br>
+
+<br>
+E também já está salvando no banco!
+<img src="categoria_list.png" class="img-fluid"><br>
+
+<br>
+Agora criaremos o formulário de alteração, que será acessado pela rota http://localhost/categoria/id_da_categoria/edit sendo id_da_categoria o numero que representa o id do registro no banco de dados.
+Para facilitar criaremos uma cópia da view create e salvaremos como edit.blade.php, e adicionamos ao value dos campos os valores do registro.<br>
+Outro detalhe importante é que o action do formulário de edição aponta para update e precisa ter também o id do registro que será editado:
+<textarea readonly rows=30 class="form-control">
+  @extends('template')
+  @section('titulo'){!! 'Categorias - Cadastro' !!} @endsection
+  @section('conteudo')
+  <form method="post" action="{{route('categoria.update', $categoria->id)}}" enctype="multipart/form-data">
+      {{ csrf_field() }}
+      {!! method_field('put') !!}
+      <div class="form-group">
+        <label for="title">Nome</label>
+        <input type="text" name="title" id="title" class="form-control" value="{{$categoria->title}}" required>
+      </div>
+
+      <div class="form-group">
+        <label for="keywords">Tags</label>
+        <input type="text" name="keywords" id="keywords" class="form-control" value="{{$categoria->keywords}}" required>
+      </div>
+
+      <div class="form-group">
+        <label for="description">Descrição</label>
+        <textarea name="description" id="description" class="form-control" value="{{$categoria->description}}" required />
+      </div>
+
+      <button type="submit" class="btn btn-warning" id="black">Salvar</button>
+  </form>
+  @endsection
+</textarea><br>
+
+<br>
+De volta ao CategoriaController, vamos programar as funções edit (responsável por mostrar o formulário de edição) e update (responsável por armazenar as mudanças no banco):
+<textarea readonly rows=18 class="form-control">
+  public function edit($id)
+  {
+    $categoria = Categoria::findOrFail($id);
+    return view('categoria.edit', compact('categoria'));
+  }
+
+ public function update(Request $request, $id)
+   {
+     $update = Categoria::where('id', $id)->update($request->except('_token', '_method'));
+     if ($update)
+        return redirect()->route('categoria.index')->with('success', 'Categoria alterada com sucesso!');
+     return redirect()->back()->with('error', 'Falha ao alterar');
+   }
+</textarea><br>
+Aqui o método edit busca no banco o registro relacionado a id e fornece os dados para a view, que por sua vez preenche os campos no formulário.<br>
+O método update recebe os dados e salva as alterações dos dados relacionados ao id.<br>
+
+</p>
+<hr>
+<h2>show</h2>
+<p>
+  É a função do controller responsável por mostrar os dados de um registro específico definido pelo id.
+  Ao acessarmos a página http://localhost/categoria/1 (sendo 1 o id do registro) somos direcionados para o método show que recupera o id passado por parâmetro, busca o registro no banco e exibe na view.<br>
+
+  <br>
+  Vamos definir uma view chamada show.blade.php de forma simples, apenas para mostrar os dados do registro:
+  <textarea readonly rows=16 class="form-control">
+    @extends('template')
+    @section('titulo'){!! $categoria->title !!} @endsection
+    @section('keywords'){!! $categoria->keywords !!} @endsection
+    @section('description'){!! $categoria->description !!} @endsection
+    @section('conteudo')
+      <i>({{$categoria->keywords}})</i>
+      <p>
+        {{$categoria->description}}
+      </p>
+    @endsection
+  </textarea><br>
+(Aproveitamos para trabalhar nosso SEO adicionando keywords e description à página)<br>
+
+<br>
+E para mostrar os dados vamos adicionar apenas duas linhas em nosso método show na controller:
+<textarea readonly rows=16 class="form-control">
+  public function show($id)
+  {
+    $categoria = Categoria::findOrFail($id);
+    return view('categoria.show', compact('categoria'));
+  }
+</textarea><br>
+
+E ao acessar o endereço http://localhost/categoria/1 nos é exibido tudo sobre a categoria de id 1 como você pode ver abaixo.<br>
+Observe também que as tags keywords e description já são modificadas automaticamente no código fonte, isso ja traz uma melhora significativa para o SEO desta página!
+<img src="categoria_show.png" class="img-fluid"><br>
+
+</p>
+<hr>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2>Artigos: Aumentando a Complexibilidade</h2>
+<p>
+Basicamente vamos fazer a mesma coisa para os artigos, mas além de mais campos, tempos uma verificação a mais para fazer, a verificação de categria.
+Isso porque todo artigo vai estar relacionado a uma categoria, afinal não queremos um blog bagunçado. Logo, para cada cadastro temos que disponibilizar a lista de categorias para o usuário escolher, e temos que validar também ao salvar no banco para evitar que usuários mal intencionados modifiquem o html e submetam um artigo vinculado a uma categoria que não existe.
+No mais, os passos são exatamente os mesmos feitos até agora.<br>
+Primeiro criamos a pasta artigo dentro de resources/views.<br>
+Dentro dela, iremos criar o arquivo index.blade.php e basicamente fazer a mesma implementação que fizemos acima na view index da pasta categoria:
+<textarea readonly rows=16 class="form-control">
+  @extends('template')
+  @section('titulo'){!! 'Artigos' !!} @endsection
+  @section('conteudo')
+    @foreach($lista as $item)
+      {{$item->id}} | {{$item->title}} - {{$item->description}}<br>
+      <a href="{{route('artigo.show', $item->id)}}">Ver</i></a>
+      <a href="{{route('artigo.edit', $item->id)}}">Alterar<i class="fa fa-pencil"></i></a>
+      <form style="display: inline-block;" method="POST" action="{{route('artigo.destroy', $item->id)}}"
+          onsubmit="return confirm('Confirma exclusão?')">
+          {{method_field('DELETE')}}{{ csrf_field() }}
+          <button type="submit">Excluir</button>
+      </form>
+      <hr>
+    @endforeach
+  @endsection
+</textarea><br>
+Aqui adicionei também o link "ver" que redireciona para o show. Você pode fazer isto também em categorias caso queira.<br>
+
+<br>
+Para chamar nossa tela vamos até a controller Artigo e, na função index retornamos nossa view index:
+<textarea readonly rows=7 class="form-control">
+public function index()
+{
+$lista = Artigo::all();
+return view('artigo.index', compact('lista'));
+}
+</textarea><br>
+
+<br>
+E ao clicar no link ARTIGOS a rota localhost/artigo nos leva ao nosso método index da controller Artigo, este lista todos os artigos cadastradas no banco e envia para a view artigo/index que as exibe, exatamente como fizemos no passo anterior com Categorias.<br>
+
+</p>
+<hr>
+<h2>Cadastro de Artigos</h2>
+<p>
+A view que conterá nosso formulário de cadasro será chamada pelo método create da controlle Artigo, então criaremos a view create.blade.php para colocar nosso formulário.<br>
+Aqui teremos uma estrutura parecida com o cadastro de categorias, porém o cadastro de artigos terá o select Categoria, responsável por listar as categorias cadastradas no banco para que o usuário
+selecione a categoria a qual quer vincular o artigo.<br>
+<br>
+
+Importante: Você deve ter reparado que nossa tabela artigo possui um campo image. Este campo armazenará o endereço de uma imagem upada no momento do cadastro do artigo, e a imagem será exibida quando um usuário acessar a página do artigo.
+A imagem portanto será pública, mas o laravel por padrão salva os uploads em uma pasta não-pública, a store, criado uma certa dificuldade para exibirmos a mesma.
+Então, antes de criar o script de upload da imagem, vamos acessar o arquivo config/filesystems.php, ele salva algumas configurações, dentre elas a Default Filesystem Disk, que por padrão possui o valor
+
+<input type="text" value="'default' => env('FILESYSTEM_DRIVER', 'local')," readonly class="form-control"/><br>
+que iremos alterar para
+<input type="text" value="'default' => env('FILESYSTEM_DRIVER', 'public')," readonly class="form-control"/><br>
+fazendo com que os arquivos sejam salvos em storage/app/public, facilitando nosso trabalho quando precisarmos exibir o arquivo.<br>
+Problema: a pasta publica do projeto, ou /public na raiz do projeto não é a mesma de storage/app/public, que é onde os arquivos upados ficarão.<br>
+Solução: criaremos um link simbólico para a pasta storage/app/public em /public, será como se os arquivos na primeira pasta estivessem dentro da segunda.<br>
+Para isso acesse via terminal o bash do laravel, dentro dele acesse a pasta do projeto, dentro dela execute:
+<input type="text" value="php artisan storage:link" readonly class="form-control"/><br>
+
+<br>
+
+Criamos agora na pasta resources/views/categoria o arquivo create.blade.php e dentro dele colocaremos um simples formulário de cadastro e importaremos o template:
+<textarea readonly rows=28 class="form-control">
+  @extends('template')
+  @section('titulo'){!! 'Categorias - Cadastro' !!} @endsection
+  @section('conteudo')
+  <form method="post" action="{{route('artigo.store')}}" enctype="multipart/form-data">
+      {{ csrf_field() }}
+      <div class="form-group">
+        <label for="categoria_id">Categoria</label>
+        <select id="categoria_id" name="categoria_id">
+          @foreach($categorias as $item)
+            <option value="{{$item->id}}">{{$item->title}}</option>
+          @endforeach
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="title">Nome</label>
+        <input type="text" name="title" id="title" class="form-control" required>
+      </div>
+
+      <div class="form-group">
+        <label for="keywords">Tags</label>
+        <input type="text" name="keywords" id="keywords" class="form-control" required>
+      </div>
+
+      <div class="form-group">
+        <label for="description">Descrição</label>
+        <textarea name="description" id="description" class="form-control" required/>
+      </div>
+
+      <div class="form-group">
+        <label for="content">Conteúdo</label>
+        <textarea name="content" id="content" class="form-control" required/>
+      </div>
+
+      <div class="form-group">
+        <label for="image">Imagem</label>
+        <input type="file" name="image" id="image" class="form-control" required>
+      </div>
+
+      <button type="submit" class="btn btn-warning" id="black">Cadastrar</button>
+  </form>
+  @endsection
+</textarea><br>
+Note também que criamos o campo image, que receberá uma imagem que será como uma capa para o artigo, logo teremos que implementar mais a frente na controller a validação desse upload de arquivo.<br>
+
+<br>
+Devolta ao controller, temos um problema a resolver, a controller Artigo não tem acesso aos dados da tabela Categoria, e ela precisará deste acesso para listar na tela de cadastro nossas categorias.<br>
+Para resolver, no início da controller Artigo adicionamos a model Categoria:
+<textarea readonly rows=18 class="form-control">
+  <?php
+
+  namespace App\Http\Controllers;
+
+  use App\Artigo;
+  use App\Categoria;
+</textarea><br>
+
+<br>
+Agora podemos programar a função create para listar as categorias e mostrar nossa view:
+<textarea readonly rows=18 class="form-control">
+public function create()
+{
+  $categorias = Categoria::all();
+  return view('artigo.create', compact('categorias'));
+}
+</textarea><br>
+
+<br>
+E a função store, agora responsável por verificar se a categoria selecionáda é válida, fazer o upload da imagem e salvar o registro:
+<textarea readonly rows=18 class="form-control">
+public function store(Request $request, Categoria $categoria)
+{
+    //validar categoria
+  $categoria = Categoria::find($request->categoria_id);
+  if (! $categoria )
+    return redirect()->back()->with('error', 'Categoria inválida');
+
+  if (! $request->file('image')->isValid() )
+    return redirect()->back()->with('error', 'Imagem inválida');
+
+    //upar imagem
+  $name = uniqid(date('HisYmd'));
+  $extension = $request->image->extension();
+  $nameFile = "{$name}.{$extension}";
+  $upload = $request->image->storeAs('artigoFiles', $nameFile);
+  if ( !$upload )
+    return redirect()->back()->with('error', 'Falha ao fazer upload')->withInput();
+
+    //salvar registro
+  $data = $request->all();
+  $data['image'] = $nameFile;
+  $insert = $artigo->create($data);
+  $insert->image=$nameFile;
+  if ($insert)
+    return redirect()->route('artigo.index')->with('success', 'Salvo com sucesso!');
+  return redirect()->back()->with('error', 'Falha ao inserir');
+}
+
+</textarea><br>
+
+Aqui o método store setado no action do formulário envia os dados para a função store, por sua vez ela tenta salvar no banco.
+Caso tudo ocorra bem o método redireciona para a view index com uma mensagem de sucesso. Caso haja algum problema ou o formulário não passe pela validação ele redireciona devolta ao formulário e apresenta uma mensagem de erro.<br>
+
+</p>
+<hr>
+<h2>show</h2>
+<p>
+Em nossa index temos uma lista de artigos com um link (ver) que, quando clicamos somos direcionados para a página daquele artigo, algo como http://localhost/artigo/1 (sendo 1 o id do registro).
+O que faremos agora é criar a view show. Na verdade ela será muito parecida com a show que criamos para a categoria, só que também mostrará a imagem (image) do artigo.
+<br>
+Vamos definir uma view chamada show.blade.php na pasta artigo com o seguinte script:
+<textarea readonly rows=16 class="form-control">
+  @extends('template')
+  @section('titulo'){!! $artigo->title !!} @endsection
+  @section('keywords'){!! $artigo->keywords !!} @endsection
+  @section('description'){!! $artigo->description !!} @endsection
+  @section('conteudo')
+  <img src="{{ asset('storage/artigoFiles/'.$artigo->image) }}"><br>
+  <i>({{$artigo->keywords}})</i><br>
+  {{$artigo->description}}
+    <p>
+      {{$artigo->content}}
+    </p>
+  @endsection
+</textarea><br>
+
+<br>
+E para mostrar os dados vamos adicionar apenas duas linhas em nosso método show na controller:
+<textarea readonly rows=16 class="form-control">
+public function show($id)
+{
+$artigo = Artigo::findOrFail($id);
+return view('artigo.show', compact('artigo'));
+}
+</textarea><br>
+
+E ao acessar o endereço http://localhost/artigo/1 nos é exibido tudo sobre o artigo de id 1 (ou seja lá qual for o artigo selecionado)<br>
+incluindo a imagem como capa do artigo!
+<img src="artigo_show.png" class="img-fluid"><br>
+</p>
+<hr>
+<h2>Desafio</h2>
+<p>
+Levando em conta o que você aprendeu sobre upload de arquivos e também sobre o processo de alteração na parte de categoria, crie a view de edição para o artigo incluindo a opção de alterar a foto de capa.<br>
+Você deverá programar também os métodos edit e update do ArtigoController para efetuar as modificações.<br>
+Lembre-se também que a view de edição, assim como a de cadastro, deverá ter um select para que a categoria também possa ser alterada se o usuário assim desejar,
+e que o select deverá trazer já selecionada a ategoria à qual pertence o artigo.
+				</p>
+				<hr>
+			</div><!--/col-->
+		</div><!--/row-->
+	</div><!--/container-->
+    <!-- Optional JavaScript -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/menu.js"></script>
+  </body>
+</html>

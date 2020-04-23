@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Aprenta sobre Views e criar telas e formulários no Laravel!">
+    <meta name="keywords" content="view, formulário, cadastro, laravel, laradock, docker, container, git, github, ubuntu">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="js/bootstrap.min.css">
+
+    <title>Views - Tutorial Docker Laradock Git no Ubuntu</title>
+  </head>
+  <body>
+	<nav class="navbar navbar-expand-lg navbar-light bg-light" id="div_nav_top">
+  		<a class="navbar-brand" href="index.html">Home</a>
+  		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    		<span class="navbar-toggler-icon"></span>
+  		</button>
+
+  		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+    		<ul class="navbar-nav mr-auto" id="ul_nav_top">
+      			<li class="nav-item active">
+        			<a class="nav-link" href="https://github.com/leandro-mandu">Idealizador</a>
+      			</li>
+    		</ul>
+  		</div>
+	</nav>
+	<div class="container">
+		<div class="row">
+			<div class="col-2">
+				<nav class="nav flex-column"  id="div_nav">
+				</nav>
+			</div><!--/col-->
+			<div class="col-6">
+				<h1>Views</h1>
+				<h2>Telas e o Blade</h2>
+				<p>
+					A View é a camada responsável pela parte visual do sistema, ela carrega as telas e formulários que serão exibidos ao usuário final do sistema.<br>
+          O Laravel utiliza o Blade para gerenciar estas telas, o que nos fornece alguns comandos e padrões que nos ajudarão a agilizar nosso trabalho.<br>
+          As views ficam na pasta resources/views do seu projeto. Você pode criar subpastas para organizar seu projeto.<br>
+          O Blade também possui um sistema de templates, o qual implementaremos para que todas as páginas fiquem corretamente formatadas sem que precisemos copiar e colar códigos e estilos em todas elas assim o menu principal e estilos serão aplicados automaticamente em todas as views, e cada view que criarmos só precisará ter o básico para funcionar.
+				</p>
+        <hr>
+        <h2>Templates</h2>
+				<p>
+					Para não perdermos tempo, vamos utilizar a própria página de boas vindas do Laravel como template, afinal o objetivo deste tutorial não é ensinar a estilizar páginas, então vamos usar o que já temos à mão.<br>
+          Vamos criar uma cópia do arquivo welcome.blade.php e chamá-lo de template.blade.php (sim, todas as views processadas pelo blade devem ter a extensão .blade.php).<br>
+          <img src="template_blade.png" class="img-fluid"><br>
+
+          <br>
+          Vamos então alterar o template.blade.php criando uma sessão e colocando a marcação @yeld no local onde será exibida nossa view, seja ela um formulário ou o texto do artigo.<br>
+          Colocarei neste exemplo o conteúdo abaixo do menu da página de boas vindas do Laravel.
+          <img src="template_yield.png" class="img-fluid"><br>
+
+          <br>
+          Pronto, já temos um template básico.
+        </p>
+        <hr>
+
+        <h2>View index</h2>
+				<p>
+          Vamos criar uma nova página inicial para nosso site, ela será chamada index.blade.php e terá apenas um testo básico que será apresentado ao usuário que acessar nosso site.<br>
+          Adicionaremos a marcação @extends para adicionar o template na view e as marcações @section e @endsection para adicionar o conteúdo ao template:
+          <textarea readonly rows=12 class="form-control">
+@extends('template')
+@section('conteudo')
+<h2>Título da página</h2>
+<p>Texto da página, texto da página. Texto da página? Testo da página:</p>
+<p>Texto da página</p>
+<p>Texto da página</p>
+<p>Texto da página</p>
+<p>e por último, porém mais importante:</p>
+<p>Texto da página</p>
+@endsection
+					</textarea><br>
+
+          <br>
+          Vamos aposentar a view padrão welcome.blade.php e passar a usar nossa nova view index.blade.php a partir de agora.<br>
+          Na pasta routes, abra o arquivo web.php e troque "welcome" por "index" para testarmos nossa view:
+          <textarea readonly rows=5 class="form-control">
+Route::get('/', function () {
+    return view('index');
+});
+					</textarea><br>
+
+          <br>
+          Salve o arquivo e atualize a página no navegador, o resultado deverá ser algo como:
+          <img src="template_ok.png" class="img-fluid"><br>
+
+                    <br>
+                    Agora todas as views que criarmos seguindo este padrão terão a mesma aparência e formatação. E se precisarmos mudar algo basta aterar o template e todas as views implementarão a modificação.<br>
+                    Vamos melhorar um pouco nosso template, antes abra o arquivo config/app.php e altere o valor em 'name' => env('APP_NAME', 'Laravel') trocando por 'name' => env('APP_NAME', 'Meu Projeto'), onde 'Meu Projeto' é o nome de seu projeto. Chame como quiser. Colocamos aqui pois podemos referenciar em vários lugares do projeto, e se o nome do projeto mudar basta alterar em um único lugar.<br>
+
+                    <br>
+                    No template, vamos alterar a tag title deixando da seguinte forma:<br>
+          					<input type="text" value="<title>@yield('titulo', config('app.name'))</title>" readonly class="form-control"/><br>
+                    Assim iremos mostrar um nome personalizado para a página. Se não passarmos nenhum parâmetro será mostrado o nome do projeto (que definimos em config/app.php).<br>
+
+                    <br>
+                    Faremos o mesmo com as tags keywords e description (otimizar o SEO, lembra?) logo abaixo da tag title:<br>
+                      <textarea readonly rows=5 class="form-control">
+<meta name="keywords" content="@yield('keywords', 'meu projeto, laravel, laradock, docker, crud, ubuntu')">
+<meta name="description" content="@yield('description', 'Esta é a descrição da página inicial, mas este valor irá mudar dinâmicamente.')">
+            					</textarea><br>
+
+                    <br>
+                    Para melhorar um pouco a aparência, coloque a div que mostra o título depois dos links de navegação, e uma linha (hr) entre eles.<br>
+                    Aqui já adicionei no menu um link para /home para voltarmos a página inicial, e também para Categorias e outro para Artigos, e é com eles que vamos trabalhar agora.
+                    <textarea readonly rows=23 class="form-control">
+<div class="content">
+    <div class="links">
+        <a href="{{ asset('/') }}">{{ config('app.name') }}</a>
+        <a href="{{ asset('categoria') }}">Categorias</a>
+        <a href="{{ asset('artigo') }}">Artigos</a>
+        <a href="https://laravel-news.com">News</a>
+        <a href="https://blog.laravel.com">Blog</a>
+        <a href="https://nova.laravel.com">Nova</a>
+        <a href="https://forge.laravel.com">Forge</a>
+        <a href="https://vapor.laravel.com">Vapor</a>
+        <a href="https://github.com/laravel/laravel">GitHub</a>
+    </div>
+    <hr>
+
+    <div class="title m-b-md">
+        @yield('titulo', 'Laravel')
+    </div>
+
+    <section class="content">
+               @yield('conteudo')
+   </section>
+          					</textarea><br>
+                    O {{ asset('/') }} insere no link o caminho desde a pasta root (public) do projeto, assim o link não "quebra" caso você esteja em um subnível.<br>
+
+                  <br>
+        					 Finalizamos aqui nossa edição de template, agora iremos novamente modificar a view index e passar o título da página separadamente para organizar melhor nosso código:
+                   <textarea readonly rows=12 class="form-control">
+ @extends('template')
+ @section('titulo'){!! 'Título da Página' !!} @endsection
+ @section('conteudo')
+ <p>Texto da página, texto da página. Texto da página? Testo da página:</p>
+ <p>Texto da página</p>
+ <p>Texto da página</p>
+ <p>Texto da página</p>
+ <p>e por último, porém mais importante:</p>
+ <p>Texto da página</p>
+ @endsection
+         					</textarea><br>
+
+
+                   E o resultado final ficou mais ou menos assim
+                   <img src="template_2.png" class="img-fluid"><br>
+                   <br>
+                   Sim, dá pra melhorar mais, mas por enquanto isso serve. Mas você pode pôr a criatividade em prática e fazer modificações como quiser!
+
+				</p>
+				<hr>
+			</div><!--/col-->
+		</div><!--/row-->
+	</div><!--/container-->
+    <!-- Optional JavaScript -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/menu.js"></script>
+  </body>
+</html>

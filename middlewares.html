@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Aprenta sobre Middlewares e criar filtros para validar formulários no Laravel!">
+    <meta name="keywords" content="middlewares, model, laravel, laradock, docker, container, git, github, ubuntu">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="js/bootstrap.min.css">
+
+    <title>Middlewares - Tutorial Docker Laradock Git no Ubuntu</title>
+  </head>
+  <body>
+	<nav class="navbar navbar-expand-lg navbar-light bg-light" id="div_nav_top">
+  		<a class="navbar-brand" href="index.html">Home</a>
+  		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    		<span class="navbar-toggler-icon"></span>
+  		</button>
+
+  		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+    		<ul class="navbar-nav mr-auto" id="ul_nav_top">
+      			<li class="nav-item active">
+        			<a class="nav-link" href="https://github.com/leandro-mandu">Idealizador</a>
+      			</li>
+    		</ul>
+  		</div>
+	</nav>
+	<div class="container">
+		<div class="row">
+			<div class="col-2">
+				<nav class="nav flex-column"  id="div_nav">
+				</nav>
+			</div><!--/col-->
+			<div class="col-6">
+				<h1>middlewares</h1>
+				<h2>Validando formulários</h2>
+				<p>
+					Um Middleware é um filtro para validar praticamente qualquer coisa. Podemos validar se o usuário está logado, ou se o formulário foi submetido corretamente por exemplo.
+				</p>
+				<p>
+					A esta altura do tutorial você já deve saber como acessar o bash do Laradock para executar comandos dentro do projeto Laravel, mas vamos relembrar mais uma vez:<br>
+          <br>
+
+          					Abra o terminal e acesse a pasta do laradock:<br>
+          					<input type="text" value="cd laradock" readonly class="form-control"/><br>
+
+        					 Acesse o bash da workspace do laradock:<br>
+          					<input type="text" value="docker exec -it laradock_workspace_1 bash" readonly class="form-control"/><br>
+
+          					Você verá que o terminal ficou parecido com isso:<br>
+          					<input type="text" value="root@caefb877725f:/var/www#" readonly class="form-control"/><br>
+
+          					Acesse a pasta do projeto:<br>
+          					<input type="text" value="cd project_name" readonly class="form-control"/><br>
+
+          					Criaremos as middlewares CategoriaPost e ArtigoPost. Colocarei Post no nome pois posteriormente posso implementar outros middlewares para outras funções, como por exemplo, criar um middleware ArtigoEdit para permitir que somente o dono do artigo possa etitá-lo.<br>
+                    Mais uma vez utilizaremos nosso amigo Artisan para criar tudo para nós:<br>
+          					<input type="text" value="php artisan make:middleware CategoriaPost" readonly class="form-control"/>
+          					<input type="text" value="php artisan make:middleware ArtigoPost" readonly class="form-control"/><br>
+
+          					<br>
+                    Se tudo estiver ok, os middlewares criados poderão ser vistos em App/Http/Middleware:<br>
+          					<img src="middlewares.png" class="img-fluid"><br>
+
+                    <br>
+                    Como você pode ver na imagem, existem vários outros middlewares já criados pelo Laravel de forma automática.
+                    Inclusive já existe um middleware para validar se o usuário está logado, e nós o implementaremos mais a frente no nosso tutorial, na sessão Controller para permitir que somente usuários logados possam postar artigos.<br>
+				</p>
+				<hr>
+			</div><!--/col-->
+		</div><!--/row-->
+	</div><!--/container-->
+    <!-- Optional JavaScript -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/menu.js"></script>
+  </body>
+</html>

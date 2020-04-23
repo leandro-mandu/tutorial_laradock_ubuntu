@@ -37,15 +37,27 @@ var json = [
 },
 {
     "id": "models",
-    "title": "Models (terminar colocando configurações da model)"
+    "title": "Models"
 },
 {
     "id": "views",
-    "title": "Views (terminar colocando configurações da view e template)"
+    "title": "Views e Template"
 },
 {
     "id": "controllers",
-    "title": "Controllers (terminar colocando configurações e rotas)"
+    "title": "Controllers e rotas"
+},
+{
+    "id": "views_crud",
+    "title": "Crud Views"
+},
+{
+    "id": "request",
+    "title": "Validação Form Request"
+},
+{
+    "id": "middlewares",
+    "title": "Middlewares"
 }
 ];
 
@@ -76,6 +88,5 @@ function resolve_file_name(){
 $(document).ready(function(){
 pop_menu(resolve_file_name());
 
-	
-});
 
+});
