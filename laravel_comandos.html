@@ -63,7 +63,7 @@
 
 				</p>
 				<hr>
-				
+
 				<h1>Banco de dados</h1>
 				<h2>Aqui entra o MySQL</h2>
 				<p>
@@ -83,7 +83,7 @@
 					<input type="text" value="root@b3aa8465a022:/#" readonly class="form-control"/><br>
 					Significando que você está logado como root no container servidor de banco de dados.<br>
 					<br>
-	
+
 					Vamos nos conectar ao mysql com o seguinte comando:<br>
 					<input type="text" value="mysql -u root -p" readonly class="form-control"/><br>
 					O terminal pedirá a senha do usuário root que, por default, também é root.<br>
@@ -96,11 +96,11 @@
 					<img src="show_databases.png" class="img-fluid"><br>
 
 					Em versões mais recentes o mysql pode não permitir que aplicações como o nosso querido projeto acessem o banco de dados diretamente com o usuário root.<br>
-					Então vamos nos prevenir criando um novo usuário:<br>
-					<input type="text" value="CREATE USER 'usuario'@'localhost' IDENTIFIED BY 'senha';" readonly class="form-control"/><br>
+					Então vamos nos prevenir criando um novo usuário. Note que nos comandos abaixo '%' pode ser substituído por localhost caso queira que o usuário possa acessar o banco apenas da máquina em que está instalado, mas se assim o fizer nossa aplicação não conseguirá se conectar pois a aplicação está em outro container, ou seja, é como se estivesse em outra máquina:<br>
+					<input type="text" value="CREATE USER 'usuario'@'%' IDENTIFIED BY 'senha';" readonly class="form-control"/><br>
 
 					E dar-lhe todas as permissões:<br>
-					<input type="text" value="GRANT ALL PRIVILEGES ON *.* TO 'usuario'@'localhost';" readonly class="form-control"/><br>
+					<input type="text" value="GRANT ALL PRIVILEGES ON *.* TO 'usuario'@'%';" readonly class="form-control"/><br>
 					É possivel criar um usuário com menos permissões, como por exemplo somente permissão para leitura e escrita, mas para nosso projeto iremos mecher na estrutura do banco, apagar e alterar tabelas e registros, então concedemos permissão total, afinal, estamos em um ambiente de desenvolvimento.<br>
 					<br>
 
@@ -111,11 +111,11 @@
 					<input type="text" value="show databases;" readonly class="form-control"/><br>
 					<img src="show_databases_with_laravel.png" class="img-fluid"><br>
 					<br>
-					
+
 					Base criada, usuário configurado, agora é hora de...
 				</p>
 				<hr>
-				
+
 				<h1>Migrations</h1>
 				<h2>Configurar conexão com banco e criar as tabelas</h2>
 				<p>
@@ -142,7 +142,7 @@ DB_PASSWORD=senha
 					Seu terminal ficará parecido com isto:<br>
 					<input type="text" value="root@caefb877725f:/var/www#" readonly class="form-control"/><br>
 					<br>
-					
+
 					Dentro da raiz de nosso projeto, temos a pasta database. Dentro dela temos a migrations, que por sua vez comporta os arquivos de criação das tabelas do banco de dados.<br>
 					O Artisan utiliza estes arquivos para criar na base que criamos, a "laravel", as tabelas que comportarão os dados principalmente dos usuários, assim nossa tela de cadastros irá enfim ter uma utilidade!<br>
 					<br>

@@ -57,7 +57,7 @@ var json = [
 },
 {
     "id": "middlewares",
-    "title": "Middlewares"
+    "title": "Middlewares e Regras de Acesso"
 }
 ];
 

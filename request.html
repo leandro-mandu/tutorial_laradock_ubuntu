@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Validação request em uma aplicação laravel no Ubuntu!">
+    <meta name="keywords" content="request, validation, laravel, laradock, docker, container, git, github, ubuntu">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="js/bootstrap.min.css">
+
+    <title>Request Validation - Tutorial Docker Laradock Git no Ubuntu</title>
+  </head>
+  <body>
+	<nav class="navbar navbar-expand-lg navbar-light bg-light" id="div_nav_top">
+  		<a class="navbar-brand" href="index.html">Home</a>
+  		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    		<span class="navbar-toggler-icon"></span>
+  		</button>
+
+  		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+    		<ul class="navbar-nav mr-auto" id="ul_nav_top">
+      			<li class="nav-item active">
+        			<a class="nav-link" href="https://github.com/leandro-mandu">Idealizador</a>
+      			</li>
+    		</ul>
+  		</div>
+	</nav>
+	<div class="container">
+		<div class="row">
+			<div class="col-2">
+				<nav class="nav flex-column"  id="div_nav">
+				</nav>
+			</div><!--/col-->
+			<div class="col-6">
+				<h1>Validação de Formulário</h1>
+				<h2>Criando Form Requests</h2>
+				<p>
+					Form Requests são classes que servem para validar os formulários dos cadastros em laravel. Para criar uma classe deste tipo acessamos o bash do laradock e acessamos a pasta do projeto laravel.
+				</p>
+				<p>
+					Acesse a pasta laradock, suba os containers necessários e acesse o bash do laradock como já vimos antes.<br>
+
+          No terminal já dentro do bash do laradock, acesse a pasta do projeto laravel e execute:<br>
+					<input type="text" value="php artisan make:request StoreCategoria --resource" readonly class="form-control"/><br>
+					<input type="text" value="php artisan make:request StoreArtigo  --resource" readonly class="form-control"/><br>
+					Isto criará dois arquivos dentro da pasta App/Http/Requests com os nomes informados acima.<br>
+          São as classes com as quais trabalharemos na validação do formulário.<br>
+          <br>
+          Dentro destas classes temos duas funções: authorize() e rules(). Na função rules() do arquivo StoreCategoria implementaremos as regras de validação do formulário dentro de um array no return da função.<br>
+          Indicaremos ao código que o título deverá ser obrigatório (required) e ter no máximo 200 caracteres (max:200) para evitar envio em branco e também estouro do limite que definimos no campo da tabela Categorias.<br>
+          O mesmo vale para keywords, porém para description deixaremos livre a quantidade de caracteres.
+<textarea readonly rows=10 class="form-control">
+  public function rules()
+  {
+    return [
+      'title' => 'required|max:200',
+      'keywords' => 'required|max:200',
+      'description' => 'required'
+    ];
+  }
+</textarea>
+<br>
+<br>
+Dentro do arquivo StoreArtigo as configurações serão um pouco mais complexas.
+Alem das validações já vistas em StoreCategoria, precisamos verificar se categoria_id é um inteiro e válido, isto é, se a categoria existe.
+
+<textarea readonly rows=15 class="form-control">
+  public function rules()
+  {
+    return [
+      'categoria_id' => 'required|integer',
+      'title' => 'required|max:200',
+      'keywords' => 'required|max:200',
+      'description' => 'required',
+      'content' => 'required'
+    ];
+  }
+</textarea>
+<br>
+No início do arquivo CategoriaController adicionamos a classe StoreCategoria:
+<textarea readonly rows=2 class="form-control">
+  use App\Http\Requests\StoreCategoria;
+</textarea>
+<br>
+
+E na função store faremos o type-hint para que os dados passem pela classe StoreCategoria:
+<textarea readonly rows=2 class="form-control">
+  public function store(StoreCategoria $request, Categoria $categoria)
+</textarea>
+<br>
+<br>
+Pronto, agora qualquer cadastro que não obedeça os requisitos será bloqueado e a página redirecionada devolta para o cadastro.<br>
+Você pode fazer as mesma implementações para a classe Artigo.<br>
+<br>
+
+
+
+				</p>
+				<hr>
+			</div><!--/col-->
+		</div><!--/row-->
+	</div><!--/container-->
+    <!-- Optional JavaScript -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/menu.js"></script>
+  </body>
+</html>

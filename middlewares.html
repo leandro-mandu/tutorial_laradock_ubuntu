@@ -10,7 +10,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="js/bootstrap.min.css">
 
-    <title>Middlewares - Tutorial Docker Laradock Git no Ubuntu</title>
+    <title>Middlewares e Controles de Acesso - Tutorial Docker Laradock Git no Ubuntu</title>
   </head>
   <body>
 	<nav class="navbar navbar-expand-lg navbar-light bg-light" id="div_nav_top">
@@ -35,38 +35,120 @@
 			</div><!--/col-->
 			<div class="col-6">
 				<h1>middlewares</h1>
-				<h2>Validando formulários</h2>
+				<h2>Validando Acessos</h2>
 				<p>
-					Um Middleware é um filtro para validar praticamente qualquer coisa. Podemos validar se o usuário está logado, ou se o formulário foi submetido corretamente por exemplo.
-				</p>
-				<p>
-					A esta altura do tutorial você já deve saber como acessar o bash do Laradock para executar comandos dentro do projeto Laravel, mas vamos relembrar mais uma vez:<br>
+					Um Middleware é um filtro de requisições do laravel. Você já deve ter notado que nossa aplicação possui falhas graves de segurança, como por exemplo, qualquer usuário mesmo sem fazer login pode cadastrar, alterar e excluir registros.
+          Através dos mecanismos de autenticação e Middlewares do laravel vamos implementar algumas regras básicas de segurança.<br>
+          1-Usuários que não fizerem login não poderão ter acesso a nada, somente a home page.<br>
+          2-Usuarios comuns que fizerem login terão acesso aos posts somente para leitura.<br>
+          3-Somente os usuários logados como administradores poderão cadastrar, alterar e excluir categorias e artigos.<br>
+          Para implementar nossas regras vamos precisar alterar a tabela users e adicionar um campo 'tipo' que guardará o tipo de usuário, que será user ou admin.<br>
+          <br>
+          Abra o arquivo referente a criação da tabela users em database/migrations.<br>
+          Na função up() adicionaremos o campo tipo no schema da criação da tabela:
+          <textarea readonly rows=10 class="form-control">
+            Schema::create('users', function (Blueprint $table) {
+                $table->id();
+                $table->string('name');
+                $table->string('email')->unique();
+                $table->timestamp('email_verified_at')->nullable();
+                $table->string('password');
+                $table->string('tipo')->default('user');
+                $table->rememberToken();
+                $table->timestamps();
+            });
+          </textarea>
+          <br>
+          Repare que utilizamos default('user') na linha que cria o tipo do usuário, isto serve para que cada usuário que se cadastre seja automaticamente um usuário comum, e não um administrador.
           <br>
 
-          					Abra o terminal e acesse a pasta do laradock:<br>
-          					<input type="text" value="cd laradock" readonly class="form-control"/><br>
+          <br>
+          Agora utilizaremos o comando abaixo para apagar as tabelas antigas e recriá-las aplicando nossa alteração:
 
-        					 Acesse o bash da workspace do laradock:<br>
-          					<input type="text" value="docker exec -it laradock_workspace_1 bash" readonly class="form-control"/><br>
+          <input type="text" value="php artisan migrate:fresh" readonly class="form-control"/><br>
 
-          					Você verá que o terminal ficou parecido com isso:<br>
-          					<input type="text" value="root@caefb877725f:/var/www#" readonly class="form-control"/><br>
+          <br>
+          E ao consultarmos nossa tabela users no phpMyAdmin podemos notar que um campo tipo foi adicionado.
+          <img src="users_tipo.png" class="img-fluid"><br>
 
-          					Acesse a pasta do projeto:<br>
-          					<input type="text" value="cd project_name" readonly class="form-control"/><br>
+          <br>
+          É por meio deste novo campo que iremos controlar o acesso aos dados e formulários do nosso projeto. E é aqui que entram os Middlewares. São classes de validação que podem validar praticamente tudo, e as utilizaremos para validar nosso controle de acesso.<br>
 
-          					Criaremos as middlewares CategoriaPost e ArtigoPost. Colocarei Post no nome pois posteriormente posso implementar outros middlewares para outras funções, como por exemplo, criar um middleware ArtigoEdit para permitir que somente o dono do artigo possa etitá-lo.<br>
-                    Mais uma vez utilizaremos nosso amigo Artisan para criar tudo para nós:<br>
-          					<input type="text" value="php artisan make:middleware CategoriaPost" readonly class="form-control"/>
-          					<input type="text" value="php artisan make:middleware ArtigoPost" readonly class="form-control"/><br>
+          <br>
+          Antes de prosseguir vamos criar um usuário Administrador e um usuario comum para que posteriormente possamos efetuar nosso teste.
+          Criaremos esses usuários no arquivo DatabaseSeeder.php dentro de database/seeds. Abra o arquivo e deixe a função run() como abaixo:
+          <textarea readonly rows=10 class="form-control">
+            public function run()
+            {
+                DB::table('users')->insert([
+                  'name' => 'Administrador',
+                  'email' => 'adm@email.com',
+                  'password' => Hash::make('senha'),
+                  'tipo' => 'admin'
+                ]);
+
+                DB::table('users')->insert([
+                  'name' => 'Usuário',
+                  'email' => 'usuario@email.com',
+                  'password' => Hash::make('outrasenha')
+                ]);
+            }          </textarea><br>
+
+            <br>
+            Execute o comando abaixo para enviar estes usuários ao banco:
+            <input type="text" value="php artisan db:seed" readonly class="form-control"/><br>
+          <br>
+
+          E veremos nossos usuários cadastrados na base:
+          <img src="users_seed.png" class="img-fluid"><br>
+
+          <br>
+          O laravel ja traz o Auth, um sistema de autenticação capaz de validar se o usuário está logago ou não.
+          Assim nos resta criar o middleware responsável por validar se o usuário é administrador (tipo = Admin).
+
+      					<input type="text" value="php artisan make:middleware IsAdmin" readonly class="form-control"/><br>
 
           					<br>
-                    Se tudo estiver ok, os middlewares criados poderão ser vistos em App/Http/Middleware:<br>
+                    Se tudo estiver ok, o middleware criado poderá ser visto em App/Http/Middleware:<br>
           					<img src="middlewares.png" class="img-fluid"><br>
 
-                    <br>
-                    Como você pode ver na imagem, existem vários outros middlewares já criados pelo Laravel de forma automática.
-                    Inclusive já existe um middleware para validar se o usuário está logado, e nós o implementaremos mais a frente no nosso tutorial, na sessão Controller para permitir que somente usuários logados possam postar artigos.<br>
+          <br>
+          Dentro de nosso middleware IsAdmin, verificaremos se está logado e, caso contrário redirecionamos para a tela de login.<br>
+        Também verificamos se é admin caso contrário redirecionamos para a página inicial '/'.
+
+        <textarea readonly rows=10 class="form-control">
+          public function handle($request, Closure $next)
+          {
+               if ( !auth()->check() )
+                   return redirect()->route('login');
+
+               $tipo = auth()->user()->tipo;
+
+               if ( $tipo != 'admin' )
+                   return redirect('/');
+
+              return $next($request);
+          }
+          </textarea><br>
+
+
+          <br>
+          Para nosso middleware funcionar temos que registrá-lo no nosso kernel.php que está na pasta app/http.
+          <img src="kernel.png" class="img-fluid"><br>
+
+          <br>
+          Agora criamos uma função construtora na controller de Artigo e Categoria. Dentro dela utilizamos a middleware auth para verificarmos se o usuário está logado e apto a visualizar aquele conteúdo,
+          e também nossa middleware IsAdmin. Note que para nossa middlerare criamos uma excessão ao index, ou seja, usuários que não são administradores podem visualizar o conteúdo de nossa index sem problemas!
+
+          <textarea readonly rows=10 class="form-control">
+            public function __construct()
+            {
+                $this->middleware('auth');
+                $this->middleware('IsAdmin', ['except' => 'index']);
+            }
+            </textarea><br>
+
+
 				</p>
 				<hr>
 			</div><!--/col-->
