@@ -48,24 +48,33 @@
 					Inicie o repositório local:<br>
 					<input type="text" value="git init" readonly class="form-control"/><br>
 
-					Adicione seu repositorio do github:<br>
-					<input type="text" value='git remote set-url origin https://github.com/user_name/project_name' readonly class="form-control"/><br>
-
 					Adicione os arquivos:<br>
 					<input type="text" value='git add *' readonly class="form-control"/><br>
+
 
 					Verifique os arquivos:<br>
 					<input type="text" value='git status' readonly class="form-control"/><br>
 
 					Faça o commit dos arquivos:<br>
-					<input type="text" value='git commit -am "descricao ex: primeiro comit"' readonly class="form-control"/><br>
+					<input type="text" value='git commit -m "first commit"' readonly class="form-control"/><br>
 
-					Sincrinoza os commits com Pull:<br>
-					<input type="text" value='git pull origin master' readonly class="form-control"/><br>
+					Selecione o branch master do projeto no github:<br>
+					<input type="text" value='git branch -M master' readonly class="form-control"/><br>
+
+					Adicione seu repositorio remoto do github:<br>
+					<input type="text" value='git remote add origin https://github.com/seu-user-name/seu-projeto.git' readonly class="form-control"/><br>
 
 					E, por último, empurre os arquivos para o repositório com Push:<br>
-					<input type="text" value='git push origin master' readonly class="form-control"/><br>
+					<input type="text" value='git push -u origin master' readonly class="form-control"/><br>
 
+					<br>
+					Das próximas vezes em que você fizer alterações no projeto, para enviar as alterações ao github basta executar os comandos abaixo:
+					<input type="text" value="git init" readonly class="form-control"/><br>
+					<input type="text" value='git remote set-url origin https://github.com/user_name/project_name' readonly class="form-control"/><br>
+					<input type="text" value='git add *' readonly class="form-control"/><br>
+					<input type="text" value='git commit -m "atualização"' readonly class="form-control"/><br>
+					<input type="text" value='git branch -M master' readonly class="form-control"/><br>
+					<input type="text" value='git push -u origin master' readonly class="form-control"/><br>
 				</p>
 				<hr>
 				
