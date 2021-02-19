@@ -77,7 +77,23 @@ Share images, automate workflows, and more with a free Docker ID:
  https://hub.docker.com/
 
 For more examples and ideas, visit:
- https://docs.docker.com/get-started/					</textarea>
+ https://docs.docker.com/get-started/					</textarea><br>
+
+ <br>
+
+ Porém você poderá ter recebido uma mensagem do tipo 'docker: Got permission denied while trying to connect to the Docker daemon socket...'.<br>
+Isto significa que seu usuário atual não tem privilégios para executar o docker. Você ainda pode executá-lo utilizando sudo, mas para que isso não seja nescessário, podemos criar um grupo docker no sistema:
+
+
+<input type="text" value="sudo groupadd docker" readonly class="form-control"/><br>
+
+E adicionar seu usuário ao grupo, garantindo assim acesso ao docker sem precisar usar o sudo:
+<input type="text" value="sudo usermod -aG docker ${USER}" readonly class="form-control"/><br>
+
+Agora, reinicie o computador ou faça log out e login novamente, após isso o "Hello World" deve funcionar sem mais problemas de acesso:<br>
+<input type="text" value="docker run hello-world" readonly class="form-control"/><br>
+
+
 				</p>
 				<hr>
 			</div><!--/col-->
