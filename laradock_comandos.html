@@ -51,7 +51,7 @@
 					<input type="text" value="docker-compose up -d nginx mysql phpmyadmin" readonly class="form-control"/><br>
 
 					 Acesse o bash da workspace do laradock, isto é, acessar o terminal da máquina virtual laradock:<br>
-					<input type="text" value="sudo docker exec -it laradock_workspace_1 bash" readonly class="form-control"/><br>
+					<input type="text" value="docker exec -it laradock_workspace_1 bash" readonly class="form-control"/><br>
 
 					Você verá que o terminal ficou parecido com isso:<br>
 					<input type="text" value="root@caefb877725f:/var/www#" readonly class="form-control"/>
@@ -67,7 +67,7 @@
 					Nele trocaremos o valor de root como no exemplo:<br>
 					<textarea readonly rows=3 class="form-control">
     server_name localhost;
-    root /var/project_name/public;
+    root /var/www/project_name/public;
     index index.php index.html index.htm;
 					</textarea>
 					E então paramos os containers e o reiniciamos para aplicar as alterações.<br>
@@ -87,4 +87,3 @@
     <script src="js/menu.js"></script>
   </body>
 </html>
-
